@@ -1,15 +1,11 @@
 package com.ecom.order_service.services;
 
-import org.springframework.http.HttpStatusCode;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClient;
 import org.springframework.web.client.RestTemplate;
-
-import com.ecom.order_service.config.RestClientConfig;
 import com.ecom.order_service.client.InventoryClient;
 import com.ecom.order_service.config.InventoryResponse;
-import com.ecom.order_service.exception.GenericExceptions;
+import java.lang.*;
 
 @Service
 public class OrderService {
@@ -48,6 +44,11 @@ public class OrderService {
 
     private void updateInventory(InventoryResponse inventory) {
         inventory.setQuantity(inventory.getQuantity() - 1);
+        try {
+            Thread.sleep(15000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         inventoryClient.updateInventory(inventory);
 
         // restClient.post().uri("http://localhost:8081/inventory")
