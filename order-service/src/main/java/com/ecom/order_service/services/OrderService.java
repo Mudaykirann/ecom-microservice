@@ -44,11 +44,6 @@ public class OrderService {
 
     private void updateInventory(InventoryResponse inventory) {
         inventory.setQuantity(inventory.getQuantity() - 1);
-        try {
-            Thread.sleep(15000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
         inventoryClient.updateInventory(inventory);
 
         // restClient.post().uri("http://localhost:8081/inventory")
