@@ -14,11 +14,13 @@ public class OrderService {
 
     private final RestClient restClient;
     private final InventoryClient inventoryClient;
+    private final InventoryService inventoryService;
 
-    public OrderService(RestTemplate restTemplate, RestClient restClient, InventoryClient inventoryClient) {
+    public OrderService(RestTemplate restTemplate, RestClient restClient, InventoryClient inventoryClient, InventoryService inventoryService) {
         this.restTemplate = restTemplate;
         this.restClient = restClient;
         this.inventoryClient = inventoryClient;
+        this.inventoryService = inventoryService;
     }
 
     public String placeOrder(Long productId) {
@@ -34,7 +36,7 @@ public class OrderService {
         // }))
         // .toEntity(InventoryResponse.class);
 
-        InventoryResponse inventoryResponse = inventoryClient.checkInventory(productId);
+        InventoryResponse inventoryResponse = inventoryService.getInventory(productId);
 
         updateInventory(inventoryResponse);
         return inventoryResponse.getQuantity() > 0 ? "Order Placed Successfully"

@@ -29,3 +29,29 @@ eureka:
       defaultZone: http://localhost:8761/eureka
   instance:
     lease-renewal-interval-in-seconds: 10
+
+resilience4j:
+  ratelimiter:
+    instances:
+      inventoryServiceRateLimiter:
+        limit-for-period: 2
+        limit-refresh-period: 10s
+        timeout-duration: 0s
+  CircuitBreaker:
+    instances:
+      inventoryServiceCircuitBreaker:
+
+      #sliding window type can be COUNT_BASED or TIME_BASED
+        sliding-window-type: COUNT_BASED
+        sliding-window-size: 6
+        minimum-number-of-calls: 1
+
+        #failure threshold in percentage, if the failure rate is equal or greater than this value, the circuit breaker will open
+        failure-rate-threshold: 50
+        wait-duration-in-open-state: 20s
+
+
+        #half open configuration, when the circuit breaker is in half open state, it will allow a certain number of calls to pass through, if they are successful, the circuit breaker will close
+        permitted-number-of-calls-in-half-open-state: 3
+        max-wait-duration-in-half-open-state: 5s
+        automatic-transition-from-open-to-half-open-enabled: true
