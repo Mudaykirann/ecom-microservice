@@ -36,7 +36,7 @@ public class OrderService {
         // }))
         // .toEntity(InventoryResponse.class);
 
-        InventoryResponse inventoryResponse = inventoryService.getInventory(productId);
+        InventoryResponse inventoryResponse = inventoryService.getInventory(productId).join();
 
         updateInventory(inventoryResponse);
         return inventoryResponse.getQuantity() > 0 ? "Order Placed Successfully"

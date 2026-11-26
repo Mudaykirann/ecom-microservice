@@ -37,6 +37,13 @@ resilience4j:
         limit-for-period: 2
         limit-refresh-period: 10s
         timeout-duration: 0s
+
+  TimeLimiter:
+    instances:
+      inventoryServiceTimeLimiter:
+        timeout-duration: 5s
+        cancel-running-future: true
+
   CircuitBreaker:
     instances:
       inventoryServiceCircuitBreaker:

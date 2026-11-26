@@ -1,5 +1,7 @@
 package com.ecom.order_service.services;
 
+import java.util.concurrent.CompletableFuture;
+
 import org.springframework.resilience.annotation.Retryable;
 import org.springframework.stereotype.Service;
 
@@ -9,6 +11,7 @@ import com.ecom.order_service.config.InventoryResponse;
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import io.github.resilience4j.ratelimiter.RequestNotPermitted;
 import io.github.resilience4j.ratelimiter.annotation.RateLimiter;
+import io.github.resilience4j.timelimiter.annotation.TimeLimiter;
 
 @Service
 public class InventoryService {
@@ -29,14 +32,16 @@ public class InventoryService {
     //     fallbackMethod = "getInventoryFallback"
     // )
 
-    @CircuitBreaker(name="inventoryServiceCircuitBreaker", fallbackMethod = "getInventoryFallback")
-    public InventoryResponse getInventory(Long productId) {
+    /*@CircuitBreaker(name="inventoryServiceCircuitBreaker", fallbackMethod = "getInventoryFallback") */
+
+    @TimeLimiter(name="inventoryServiceTimeLimiter", fallbackMethod = "getInventoryFallback")
+    public CompletableFuture<InventoryResponse> getInventory(Long productId) {
         System.out.println("Calling Inventory Service for productID: " + productId);
-        return inventoryClient.checkInventory(productId);
+        return CompletableFuture.supplyAsync(()-> inventoryClient.checkInventory(productId));
     }
 
-    public InventoryResponse getInventoryFallback(Long productId, RequestNotPermitted ex) {
-        System.out.println("Rate limit hit for productID: " + productId + " - returning fallback");
-        return new InventoryResponse(productId,0);
+    public CompletableFuture<InventoryResponse> getInventoryFallback(Long productId, RequestNotPermitted ex) {
+        System.out.println("Time limit hit for productID: " + productId + " - returning fallback");
+        return CompletableFuture.completedFuture(new InventoryResponse(productId,0));
     }
 }
