@@ -37,6 +37,13 @@ resilience4j:
         limit-for-period: 2
         limit-refresh-period: 10s
         timeout-duration: 0s
+
+  TimeLimiter:
+    instances:
+      inventoryServiceTimeLimiter:
+        timeout-duration: 5s
+        cancel-running-future: true
+
   CircuitBreaker:
     instances:
       inventoryServiceCircuitBreaker:
@@ -55,3 +62,14 @@ resilience4j:
         permitted-number-of-calls-in-half-open-state: 3
         max-wait-duration-in-half-open-state: 5s
         automatic-transition-from-open-to-half-open-enabled: true
+
+management:
+  tracing:
+    sampling:
+      probability: 1.0
+  
+  opentelemetry:
+    tracing:
+      export:
+        otlp:
+          endpoint: http://localhost:4318/v1/traces

@@ -85,7 +85,22 @@
 			<groupId>org.springframework.retry</groupId>
 			<artifactId>spring-retry</artifactId>
 		</dependency>
+
+	<!--Open Telemertry -->
+
+	<dependency>
+		<groupId>org.springframework.boot</groupId>
+		<artifactId>spring-boot-starter-opentelemetry</artifactId>
+	</dependency>
+
+	<dependency>
+		<groupId>io.github.openfeign</groupId>
+		<artifactId>feign-micrometer</artifactId>
+	</dependency>
+
 	</dependencies>
+
+
 
 	<dependencyManagement>
 		<dependencies>

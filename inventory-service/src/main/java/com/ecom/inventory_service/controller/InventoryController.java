@@ -11,6 +11,9 @@ import org.springframework.web.bind.annotation.RestController;
 import com.ecom.inventory_service.model.Inventory;
 import com.ecom.inventory_service.services.InventoryService;
 
+import java.lang.Thread;
+import java.util.concurrent.CompletableFuture;
+
 @RestController 
 @RequestMapping("/inventory")
 public class InventoryController {
@@ -22,9 +25,15 @@ public class InventoryController {
     }
 
     @GetMapping("/{productId}")
-    public Inventory checkInventory(@PathVariable Long productId){
-        return inventoryService.checkStock(productId);
+    public CompletableFuture<Inventory> checkInventory(@PathVariable Long productId){
+        try {
+            Thread.sleep(2000);
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+        }
+        return CompletableFuture.supplyAsync(()-> inventoryService.checkStock(productId));
     }
+    
 
     @PostMapping
     public String addProduct(@RequestBody Inventory inventory){
