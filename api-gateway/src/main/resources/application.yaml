@@ -7,14 +7,65 @@ spring:
         webflux:
           routes:
             - id: ecom-order-service
-              uri: lb://ECOM-ORDER-SERVICE
+              uri: lb://ecom-order-service
               predicates:
-                - Path=/order/**
+                - Path=/order/{productId}
+              filters:
+                - SetPath=/api/v1/orders/place/{productId}
+
+            - id: ecom-order-api-v1
+              uri: lb://ecom-order-service
+              predicates:
+                - Path=/api/v1/orders,/api/v1/orders/**
                 
-            - id: ecom-inventory-service
-              uri: lb://ECOM-INVENTORY-SERVICE
+            - id: ecom-inventory-service-collection
+              uri: lb://ecom-inventory-service
               predicates:
-                - Path=/inventory/**
+                - Path=/inventory
+              filters:
+                - SetPath=/api/inventory
+
+            - id: ecom-inventory-service-item
+              uri: lb://ecom-inventory-service
+              predicates:
+                - Path=/inventory/{id}
+              filters:
+                - SetPath=/api/inventory/{id}
+
+            - id: ecom-inventory-service-reserve
+              uri: lb://ecom-inventory-service
+              predicates:
+                - Path=/inventory/{id}/reserve
+              filters:
+                - SetPath=/api/inventory/{id}/reserve
+
+            - id: ecom-inventory-service-commit
+              uri: lb://ecom-inventory-service
+              predicates:
+                - Path=/inventory/{id}/commit
+              filters:
+                - SetPath=/api/inventory/{id}/commit
+
+            - id: ecom-inventory-service-release
+              uri: lb://ecom-inventory-service
+              predicates:
+                - Path=/inventory/{id}/release
+              filters:
+                - SetPath=/api/inventory/{id}/release
+
+            - id: ecom-product-service-collection
+              uri: lb://ecom-product-service
+              predicates:
+                - Path=/product
+              filters:
+                - SetPath=/api/products
+
+            - id: ecom-product-service-item
+              uri: lb://ecom-product-service
+              predicates:
+                - Path=/product/{id}
+              filters:
+                - SetPath=/api/products/{id}
 
 server:
   port: 9090
@@ -23,3 +74,5 @@ eureka:
   client:
     service-url:
       defaultZone: http://localhost:8761/eureka/
+  instance:
+    prefer-ip-address: true

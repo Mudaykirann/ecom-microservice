@@ -24,7 +24,8 @@ public class CustomInventoryEncoder implements Encoder {
             if (object instanceof InventoryResponse inventory) {
                 Map<String, Object> map = new HashMap<>();
                 map.put("productId", inventory.getProductId());
-                map.put("quantity", inventory.getQuantity());
+                map.put("stockQuantity", inventory.getStockQuantity());
+                map.put("reservedQuantity", inventory.getReservedQuantity());
 
                 String json = objectMapper.writeValueAsString(map);
                 template.body(json);

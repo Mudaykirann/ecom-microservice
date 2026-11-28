@@ -1,14 +1,58 @@
 {
+    "version": "0.2.0",
     "configurations": [
         {
             "type": "java",
-            "name": "Spring Boot-InventoryServiceApplication<inventory-service>",
+            "name": "Eureka Server",
             "request": "launch",
-            "cwd": "${workspaceFolder}",
+            "cwd": "${workspaceFolder}\\eureka-server",
+            "mainClass": "com.ecom.eureka_server.EurekaServerApplication",
+            "projectName": "eureka-server"
+        },
+        {
+            "type": "java",
+            "name": "API Gateway",
+            "request": "launch",
+            "cwd": "${workspaceFolder}\\api-gateway",
+            "mainClass": "com.ecom.api_gateway.ApiGatewayApplication",
+            "projectName": "api-gateway"
+        },
+        {
+            "type": "java",
+            "name": "Order Service",
+            "request": "launch",
+            "cwd": "${workspaceFolder}\\order-service",
+            "mainClass": "com.ecom.order_service.OrderServiceApplication",
+            "projectName": "order-service"
+        },
+        {
+            "type": "java",
+            "name": "Inventory Service",
+            "request": "launch",
+            "cwd": "${workspaceFolder}\\inventory-service",
             "mainClass": "com.ecom.inventory_service.InventoryServiceApplication",
-            "projectName": "inventory-service",
-            "args": "",
-            "envFile": "${workspaceFolder}/.env"
+            "projectName": "inventory-service"
+        },
+        {
+            "type": "java",
+            "name": "Product Service",
+            "request": "launch",
+            "cwd": "${workspaceFolder}\\product-service",
+            "mainClass": "com.ecom.product_service.ProductServiceApplication",
+            "projectName": "product-service"
+        }
+    ],
+    "compounds": [
+        {
+            "name": "All Ecom Services",
+            "configurations": [
+                "Eureka Server",
+                "API Gateway",
+                "Order Service",
+                "Inventory Service",
+                "Product Service"
+            ],
+            "stopAll": true
         }
     ]
 }
