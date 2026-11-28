@@ -24,6 +24,7 @@ eureka:
     service-url:
       defaultZone: http://localhost:8761/eureka
   instance:
+    prefer-ip-address: true
     lease-renewal-interval-in-seconds: 10
 
 management:
@@ -35,4 +36,4 @@ management:
     tracing:
       export:
         otlp:
-          endpoint: http:localhost:4318/v1/traces
+          endpoint: http://otel-collector:4318/v1/metrics

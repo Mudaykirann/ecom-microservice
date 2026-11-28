@@ -23,25 +23,29 @@ public class InventoryService {
     }
 
     // @Retryable(
-    //     includes = RuntimeException.class,
-    //     maxRetries = 2,
-    //     delay = 2000
+    // includes = RuntimeException.class,
+    // maxRetries = 2,
+    // delay = 2000
     // )
     // @RateLimiter(
-    //     name = "inventoryServiceRateLimiter",
-    //     fallbackMethod = "getInventoryFallback"
+    // name = "inventoryServiceRateLimiter",
+    // fallbackMethod = "getInventoryFallback"
     // )
 
-    /*@CircuitBreaker(name="inventoryServiceCircuitBreaker", fallbackMethod = "getInventoryFallback") */
+    /*
+     * @CircuitBreaker(name="inventoryServiceCircuitBreaker", fallbackMethod =
+     * "getInventoryFallback")
+     */
+    // @TimeLimiter(name="inventoryServiceTimeLimiter", fallbackMethod =
+    // "getInventoryFallback")
 
-    @TimeLimiter(name="inventoryServiceTimeLimiter", fallbackMethod = "getInventoryFallback")
     public CompletableFuture<InventoryResponse> getInventory(Long productId) {
         System.out.println("Calling Inventory Service for productID: " + productId);
-        return CompletableFuture.supplyAsync(()-> inventoryClient.checkInventory(productId));
+        return CompletableFuture.supplyAsync(() -> inventoryClient.checkInventory(productId));
     }
 
     public CompletableFuture<InventoryResponse> getInventoryFallback(Long productId, RequestNotPermitted ex) {
         System.out.println("Time limit hit for productID: " + productId + " - returning fallback");
-        return CompletableFuture.completedFuture(new InventoryResponse(productId,0));
+        return CompletableFuture.completedFuture(new InventoryResponse(productId, 0, 0));
     }
 }
